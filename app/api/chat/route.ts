@@ -19,21 +19,13 @@ export async function POST(req: Request) {
   } = await req.json();
 
   const result = streamText({
-    model: openai.responses("gpt-5-nano"),
+    model: openai("gpt-4o-mini"),
     messages: await convertToModelMessages(messages),
     system,
     tools: {
       ...frontendTools(tools ?? {}),
     },
-    providerOptions: {
-      openai: {
-        reasoningEffort: "low",
-        reasoningSummary: "auto",
-      },
-    },
   });
 
-  return result.toUIMessageStreamResponse({
-    sendReasoning: true,
-  });
+  return result.toUIMessageStreamResponse();
 }
